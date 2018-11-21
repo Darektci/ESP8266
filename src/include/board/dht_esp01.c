@@ -6,6 +6,10 @@
  ============================================================================
 */
 
+#define B_CFG_PORT          0
+#define B_RELAY1_PORT       2
+
+
 
 void ICACHE_FLASH_ATTR supla_esp_board_set_device_name(char *buffer, uint8 buffer_size) {
     #ifdef __BOARD_dht11_esp01
@@ -20,16 +24,23 @@ void ICACHE_FLASH_ATTR supla_esp_board_set_device_name(char *buffer, uint8 buffe
 	
 void supla_esp_board_gpio_init(void) {
 		
-	supla_input_cfg[0].type = INPUT_TYPE_BUTTON;
-	supla_input_cfg[0].gpio_id = 0;
+		
+	supla_input_cfg[0].type = supla_esp_cfg.CfgButtonType == BTN_TYPE_SWITCH ? INPUT_TYPE_SWITCH : INPUT_TYPE_BUTTON;
+	supla_input_cfg[0].gpio_id = B_CFG_PORT;
 	supla_input_cfg[0].flags = INPUT_FLAG_PULLUP | INPUT_FLAG_CFG_BTN;
+
+		// ---------------------------------------
+		// ---------------------------------------
+
+    supla_relay_cfg[0].gpio_id = B_RELAY1_PORT;
+	supla_relay_cfg[0].flags = RELAY_FLAG_RESET;
+	supla_relay_cfg[0].channel = 1;
 
 }
 
-void supla_esp_board_set_channels(TDS_SuplaRegisterDevice_B *srd) {
-	
+void ICACHE_FLASH_ATTR supla_esp_board_set_channels(TDS_SuplaRegisterDevice_B *srd) {
 
-	srd->channel_count = 1;
+	srd->channel_count = 2;
 	srd->channels[0].Number = 0;
 
 	#ifdef __BOARD_dht11_esp01
@@ -45,9 +56,19 @@ void supla_esp_board_set_channels(TDS_SuplaRegisterDevice_B *srd) {
 
 	supla_get_temp_and_humidity(srd->channels[0].value);
 
+    
+	
+	srd->channels[1].Number = 1;
+	srd->channels[1].Type = SUPLA_CHANNELTYPE_RELAY;
+	srd->channels[1].FuncList =  SUPLA_BIT_RELAYFUNC_CONTROLLINGTHEGATEWAYLOCK \
+									| SUPLA_BIT_RELAYFUNC_CONTROLLINGTHEGATE \
+									| SUPLA_BIT_RELAYFUNC_CONTROLLINGTHEGARAGEDOOR \
+									| SUPLA_BIT_RELAYFUNC_CONTROLLINGTHEDOORLOCK;
 
+	srd->channels[1].Default = 1;
+	srd->channels[1].value[1] = supla_esp_gpio_relay_on(B_RELAY1_PORT);
 
 }
 
-void supla_esp_board_send_channel_values_with_delay(void *srpc) {
+void ICACHE_FLASH_ATTR supla_esp_board_send_channel_values_with_delay(void *srpc) {
 }

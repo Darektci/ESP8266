@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ###
-# This program is free software; you can redistribute it and/or
+# 2This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
 # of the License, or (at your option) any later version.
@@ -28,10 +28,10 @@ export BIN_PATH=/hdd2/Espressif/ESP8266_BIN
 
 case $1 in
    "dht11_esp01")
-      FLASH_SIZE="512"
+      FLASH_SIZE="1024"
    ;;
    "dht22_esp01")
-      FLASH_SIZE="512"
+      FLASH_SIZE="1024"
    ;;
    "am2302_esp01")
       FLASH_SIZE="512"

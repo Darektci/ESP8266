@@ -11,5 +11,6 @@
 
 #define DHTSENSOR
 #define TEMPERATURE_HUMIDITY_CHANNEL 0
+//#define USE_GPIO3
 
 #endif
