@@ -40,7 +40,7 @@ supla_dht_read_th(void *timer_arg) {
 	#elif defined(W1_GPIO5)
 	  sensor.port = 5;
 	#elif defined(W1_GPIO14)
-	  sensor.port = 14;
+	  sensor.port = 14;   
 	#else
 	  sensor.port = 2;
 	#endif
